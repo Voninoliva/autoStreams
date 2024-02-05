@@ -13,6 +13,8 @@
     "bulma": "^0.9.4",
     "bulma-carousel": "^4.0.24",
     "bulma-dashboard": "^0.3.2",
+    "bulma-extensions": "^6.2.7",
+    "bulma-list": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0"
