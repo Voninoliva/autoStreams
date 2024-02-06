@@ -3,7 +3,7 @@ import '../assets/css/style.css';
 import { useEffect, useState } from 'react';
 import UneAnnonce from './enfants/UneAnnonce';
 function ComposantAnnonce({ ip }) {
-   const url=`${ip}/validation/etat/1`;
+    const [url,setUrl] = useState(`${ip}/validation/etat/1`);
     document.addEventListener('load', () => {
         document.querySelector('.pageloader').classList.add('is-active');
     });
@@ -15,15 +15,22 @@ function ComposantAnnonce({ ip }) {
         const dashboardPanel = document.querySelector('.dashboard-panel');
         dashboardPanel.classList.remove('is-active');
     } 
+    function annoncesRecentes(){
+        setUrl(`${ip}/annonce/recentes`);
+    }
+    function annoncesAnciennes(){
+        setUrl(`${ip}/annonce/anciennes`);
+    }
   const[renderDetails,setRender] = useState([]);
     useEffect(()=>{
         async function fetchData(){
+            console.log("niova le url zany  ",url);
             try{
                 const allAnnonceData = await fetch(url);
                 const allAnnonce = await allAnnonceData.json();
                 const retournees = () => {
                     return  allAnnonce.map((detail,index)=>(
-                        <UneAnnonce data={detail} key={index}/>
+                        <UneAnnonce data={detail.annonce?detail.annonce:detail} key={index}/>
                     ));
                 }
                 setRender(retournees);
@@ -34,7 +41,7 @@ function ComposantAnnonce({ ip }) {
         }
        
         fetchData();
-    },[]);
+    },[url]);
     useEffect(()=>{
         bulmaCarousel.attach('.carousel', {
             initialSlide: 1,
@@ -148,12 +155,13 @@ function ComposantAnnonce({ ip }) {
                                             </div>
                                             <div className="dropdown-menu" id="dropdown-menu6" role="menu">
                                                 <div className="dropdown-content">
-                                                    <a href="#" className="dropdown-item">
-                                                        En vedette
+                                                    <a href="#" className="dropdown-item" onClick={annoncesAnciennes}>
+                                                    Annonces plus anciennes
                                                     </a>
-                                                    <a href="#" className="dropdown-item">
+                                                    <a href="#" className="dropdown-item" onClick={annoncesRecentes}>
                                                         Annonces les plus récentess
                                                     </a>
+                                                    
                                                     <a href="#" className="dropdown-item">
                                                         Prix: décroissant
                                                     </a>

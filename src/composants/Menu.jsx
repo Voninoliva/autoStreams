@@ -3,16 +3,91 @@ import '../assets/css/mystyle.css';
 import '../assets/css/style.css';
 import '../assets/js/myscript';
 import logo from '../assets/img/logo.png';
-export default function Menu() {
-    function menuResponsive(){
+import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel.min.js';
+import placeholderImage from '../assets/img/logins/login.jpg';
+import {Navigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+export default function Menu({ip}) {
+    function menuResponsive() {
         console.log("atooooo");
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-        $navbarBurgers.forEach(el => {    
-                const target = el.dataset.target;
-                const $target = document.getElementById(target);
-                el.classList.toggle('is-active');
-                $target.classList.toggle('is-active');
+        $navbarBurgers.forEach(el => {
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
         });
+    }
+    function initCarouselLogin() {
+        bulmaCarousel.attach('.carousel-login', {
+            slidesToScroll: 1,
+            slidesToShow: 1,
+            autoplay: true,
+            infinite: true,
+            navigation: false,
+            navigationKeys: false,
+            pagination: false,
+        });
+        removePagination();
+    }
+    function removePagination() {
+        const previous = document.querySelectorAll('.slider-navigation-previous');
+        previous.forEach((item) => {
+            item.classList.add('is-hidden');
+        });
+        const next = document.querySelectorAll('.slider-navigation-next');
+        next.forEach((item) => {
+            item.classList.add('is-hidden');
+        });
+    }
+    function openModal() {
+        const modal = document.querySelector('.modal');
+        const signIn = document.querySelectorAll('.sign-in');
+        signIn.forEach((item) => {
+            modal.classList.add('is-active');
+            initCarouselLogin();
+        });
+    }
+    function closeModal() {
+        const modal = document.querySelector('.modal');
+        const closeModal = document.querySelector('.modal-close');
+        modal.classList.remove('is-active');
+    }
+    const v = `${ip}/login/auth`;
+    const navigate = useNavigate();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        alert("ato fa ela be");
+        const form = e.target;
+        const formData = new FormData(form);
+        const email = formData.get('email');
+        const password = formData.get('pwd');
+        const objetAEnvoyer = {
+            'email': email,
+            'mdp': password
+        }
+        try {
+            const response = await fetch(v, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(objetAEnvoyer)
+            });
+            if (response.ok) {
+                const responseData = await response.json();
+                const token = responseData.response.token;
+                localStorage.setItem('token',token);
+                console.log("token ",localStorage.getItem('token'));
+                navigate('/login');
+            }
+            else {
+                alert('Échec de la connexion', JSON.stringify(response));
+            }
+        }
+        catch (error) {
+            alert('Erreur lors de la connexion'+ error);
+        }
     }
     return (
         <>
@@ -34,7 +109,7 @@ export default function Menu() {
 
                         <div className="navbar-menu" id="menu">
                             <div className="navbar-end">
-                                <a className="navbar-item is-tab is-hidden-desktop sign-in">
+                                <a className="navbar-item is-tab is-hidden-desktop sign-in" onClick={openModal}>
                                     Mon profil
                                 </a>
                                 <a className="navbar-item is-tab is-hidden-desktop">
@@ -55,11 +130,11 @@ export default function Menu() {
                                 </div>
                                 <div className="navbar-item is-hidden-touch">
                                     <div className="buttons is-right">
-                                        <div className="button is-rounded is-light has-text-info sign-in">
+                                        <a className="button is-rounded is-light has-text-info sign-in" onClick={openModal}>
                                             <span className="icon">
                                                 <i className="fa-regular fa-user fa-lg"></i>
                                             </span>
-                                        </div>
+                                        </a>
                                         <div className="button is-rounded is-light has-text-info">
                                             <span className="icon">
                                                 <i className="fa-regular fa-heart fa-lg"></i>
@@ -77,6 +152,73 @@ export default function Menu() {
                     </div>
                 </nav>
             </header>
+            <div className="modal">
+                <div className="modal-background"></div>
+                <div className="modal-content">
+                    <div className="box" style={{ overflowY: "hidden", height: "590px" }}>
+                        <div className="columns">
+                            <div className="column is-8 p-0 is-hidden-touch">
+                                <div className="carousel-login" style={{ overflowX: "hidden" }}>
+                                    <div className="item-1">
+                                        <figure className="image is-4by3">
+                                            <img src={placeholderImage} alt="Placeholder image" />
+                                        </figure>
+                                    </div>
+                                    <div className="item-2">
+                                        <figure className="image is-4by3">
+                                            <img src="assets/img/undraw_city_driver_re_9xyv.svg" alt="Placeholder image" />
+                                        </figure>
+                                    </div>
+                                    <div className="item-3">
+                                        <figure className="image is-4by3">
+                                            <img src="assets/img/undraw_delivery_truck_vt6p.png" alt="Placeholder image" />
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                            <form className="column is-4 is-full-touch pl-5"  onSubmit={handleSubmit}>
+                                <div className="content is-flex is-flex-direction-column is-justify-content-center is-align-content-center"
+                                    style={{ height: "92.5%" }}>
+                                    <div className="is-flex is-justify-content-center">
+                                        <figure className="image is-64x64 is-flex">
+                                            <img src={logo} className="is-rounded" />
+                                        </figure>
+                                    </div>
+                                    <div className="field">
+                                        <label className="label">E-mail</label>
+                                        <div className="control">
+                                            <input type="email" className="input" placeholder="Entrez votre adresse e-mail" name='email'/>
+                                        </div>
+                                    </div>
+                                    <div className="field">
+                                        <label className="label">Mot de passe</label>
+                                        <div className="control">
+                                            <input type="password" className="input" placeholder="Entrez votre mot de passe" name='pwd'/>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div className="field">
+                                        <div className="control">
+                                            <button className="button is-fullwidth is-info" type='submit'>
+                                                Se connecter
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="is-divider" data-content="OU"></div>
+                                    <div className="field">
+                                        <div className="control">
+                                            <button className="button is-fullwidth is-info is-outlined has-text-weight-bold">
+                                                Continuer avec Google
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <button className="modal-close is-large" onClick={closeModal}></button>
+            </div>
         </>
     );
 }
