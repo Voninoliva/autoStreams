@@ -3,6 +3,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSubmitDataToken } from '../generalise';
 export default function UneAnnonce({ data,ip }) {  
+    useEffect(()=>{
+        bulmaCarousel.attach('.carousel', {
+            initialSlide: 1,
+            slidesToScroll: 1,
+            slidesToShow: 1,
+            navigation: false,
+        });
+    },[])
     const token = localStorage.getItem('token');
     const voiture = data.voiture;
     const imageRenders = () => {
@@ -18,7 +26,7 @@ export default function UneAnnonce({ data,ip }) {
     function parlerAuVendeur(){
         const idutilisateur = data.idutilisateur;
         // ao amin le composant ato koa miantso an le verfication utilisateur
-        
+
     }
     const navigate = useNavigate();
     const envoyer = useSubmitDataToken();
@@ -57,7 +65,6 @@ export default function UneAnnonce({ data,ip }) {
                                     <div className="list-item-title has-text-info">{voiture.modele.nommodele} de {voiture.modele.marque.nommarque}</div>
                                     <div className="list-item-description help">{data.descri}</div>
                                 </div>
-
                                 <div className="list-item-controls has-text-info">
                                     <a className="icon is-clickable like" onClick={addOnFavList}>
                                         <i className="fa-regular fa-heart fa-lg"></i>

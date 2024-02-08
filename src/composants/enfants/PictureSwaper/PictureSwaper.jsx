@@ -29,13 +29,12 @@ const PictureSwaper = (props) => {
           <div className="left_swiper" onClick={()=>{
             handleIndex(selectedBox-1)
           }}>
-            Left
+            &#171;
           </div>
-
           <div className="right_swiper"  onClick={()=>{
             handleIndex(1 +selectedBox)
           }}>
-            Right 
+           &#187;
           </div>
           {props.pictures.map((key, index) => (
             <SwiperSlide key={index}>

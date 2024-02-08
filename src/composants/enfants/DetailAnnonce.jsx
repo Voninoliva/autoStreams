@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel.min.js';
 import { useEffect, useState, useRef } from "react";
 import PictureSwaper from "./PictureSwaper/PictureSwaper";
-import {Navigate} from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 export function DetailAnnonce({ ip }) {
@@ -34,7 +34,7 @@ export function DetailAnnonce({ ip }) {
                 idmodele: 1,
                 nommodele: "Ceed SW hybride rechargeable",
                 poids: 2300,
-                etat:0,
+                etat: 0,
                 reservoire: 6,
                 carrosserie: {
                     idcarrosserie: 5,
@@ -51,8 +51,8 @@ export function DetailAnnonce({ ip }) {
                     idmarque: 5,
                     nommarque: 'BMW',
                     continent: {
-                        idcontinent:1,
-                        nomcontinent :''
+                        idcontinent: 1,
+                        nomcontinent: ''
                     },
                     photo: 'qsdfg'
                 }
@@ -71,6 +71,15 @@ export function DetailAnnonce({ ip }) {
     const url = `${ip}/annonce/${idannonce}`;
     const [options, setOptions] = useState('');
     const [annonce, setAnnonce] = useState(annonceData);
+    const dateObj = new Date(annonce.datepub);
+
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -98,10 +107,10 @@ export function DetailAnnonce({ ip }) {
         fetchData();
     }, []);
 
-    useEffect(()=>{
-           console.log(" uploaded ",annonce)
-        },[annonce]);
-    function parlerAuVendeur(){
+    // useEffect(()=>{
+    //        console.log(" uploaded ",annonce)
+    //     },[annonce]);
+    function parlerAuVendeur() {
 
     }
     return (
@@ -158,7 +167,7 @@ export function DetailAnnonce({ ip }) {
                                     <span className="tag is-primary is-light"> {annonce.voiture.nbporte} portes </span>
                                     <span className="tag is-primary is-light"> {annonce.voiture.nbplace} places </span>
                                     <span className="tag is-primary is-light"> {annonce.voiture.conduite.nomconduite} </span>
-                                    <span className="tag is-primary is-light">{annonce.voiture .modele.reservoire} L</span>
+                                    <span className="tag is-primary is-light">{annonce.voiture.modele.reservoire} L</span>
                                     <span className="tag is-primary is-light">{annonce.voiture.modele.carrosserie.nomcarrosserie}</span>
                                     <span className="tag is-primary is-light">{annonce.voiture.modele.longueur} X {annonce.voiture.modele.largeur} X {annonce.voiture.modele.hauteur} </span>
                                     <span className="tag is-primary is-light">{annonce.voiture.modele.poids} T</span>
@@ -174,7 +183,7 @@ export function DetailAnnonce({ ip }) {
                                         <div>
                                             <p className="heading">Annee</p>
                                             <p className="title">
-                                             {new Date(annonce.voiture.datesortie).getFullYear()}
+                                                {new Date(annonce.voiture.datesortie).getFullYear()}
                                             </p>
                                         </div>
                                     </div>
@@ -182,7 +191,7 @@ export function DetailAnnonce({ ip }) {
                                         <div>
                                             <p className="heading">Etat</p>
                                             <p className="title">
-                                              {annonce.voiture.etat?annonce.voiture.etat:'non specifie'}</p>
+                                                {annonce.voiture.etat ? annonce.voiture.etat : 'non specifie'}</p>
                                         </div>
                                     </div>
                                 </nav>
@@ -197,11 +206,11 @@ export function DetailAnnonce({ ip }) {
 
                                 <div className="buttons is-right">
                                     <button className="button is-info has-text-weight-semibold" onClick={parlerAuVendeur}>
-                                       Parler au vendeur
+                                        Parler au vendeur
                                     </button>
-                                    {/* <button className="button is-danger has-text-weight-semibold">
-                                        Supprimer
-                                    </button> */}
+                                    <button className="button is-info is-light has-text-weight-semibold">
+                                        Date de l'annonce : {formattedDate}
+                                    </button>
                                 </div>
                             </div>
                         </div>

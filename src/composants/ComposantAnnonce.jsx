@@ -3,53 +3,80 @@ import '../assets/css/style.css';
 import { useEffect, useState } from 'react';
 import UneAnnonce from './enfants/UneAnnonce';
 function ComposantAnnonce({ ip }) {
-    const [url,setUrl] = useState(`${ip}/validation/etat/1`);
+    const [url, setUrl] = useState(`${ip}/validation/etat/1`);
+    const [marque, setMarque] = useState(null);
+    const [categorie, setCategorie] = useState(null);
+    const [filtre,setFiltre] = useState('Toutes les annonces');
     document.addEventListener('load', () => {
         document.querySelector('.pageloader').classList.add('is-active');
     });
-    function ouvrirFlitre(){
+    function ouvrirFlitre() {
         const dashboardPanel = document.querySelector('.dashboard-panel');
         dashboardPanel.classList.toggle('is-active');
     }
-    function fermerFiltre(){
+    function fermerFiltre() {
         const dashboardPanel = document.querySelector('.dashboard-panel');
         dashboardPanel.classList.remove('is-active');
-    } 
-    function annoncesRecentes(){
+    }
+    function annoncesRecentes() {
         setUrl(`${ip}/annonce/recentes`);
+        setFiltre('Tri par annonces les plus recentes');
     }
-    function annoncesAnciennes(){
+    function annoncesAnciennes() {
         setUrl(`${ip}/annonce/anciennes`);
+        setFiltre('Tri par annonces les plus anciennes');
     }
-  const[renderDetails,setRender] = useState([]);
-    useEffect(()=>{
-        async function fetchData(){
-            console.log("niova le url zany  ",url);
-            try{
+    function rechercherPar(thisurl,titre){
+        setFiltre(titre);
+        setUrl(thisurl);
+    }
+    const [renderDetails, setRender] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            try {
                 const allAnnonceData = await fetch(url);
                 const allAnnonce = await allAnnonceData.json();
-                const retournees = () => {
-                    return  allAnnonce.map((detail,index)=>(
-                        <UneAnnonce data={detail.annonce?detail.annonce:detail} key={index} ip={ip}/>
-                    ));
+                var retournees = null;
+                if(allAnnonce.content){
+                     retournees = () => {
+                        return allAnnonce.content.map((detail, index) => (
+                            <UneAnnonce data={detail.annonce ? detail.annonce : detail} key={index} ip={ip} />
+                        ));
+                    }
                 }
+                else{
+                    retournees = () => {
+                        return allAnnonce.map((detail, index) => (
+                            <UneAnnonce data={detail.annonce ? detail.annonce : detail} key={index} ip={ip} />
+                        ));
+                    }
+                }
+               
                 setRender(retournees);
+
             }
             catch (error) {
                 console.log('Error fetching data:', error);
             }
         }
-       
+
         fetchData();
-    },[url]);
-    useEffect(()=>{
-        bulmaCarousel.attach('.carousel', {
-            initialSlide: 1,
-            slidesToScroll: 1,
-            slidesToShow: 1,
-            navigation: false,
-        });
-    });
+    }, [url]);
+    useEffect(() => {
+        async function fetchData() {
+
+            const urlMarque = `${ip}/marque`;
+            const marqueData = await fetch(urlMarque);
+            const marques = await marqueData.json();
+            setMarque(marques);
+            const categorieData = await fetch(`${ip}/categorie`);
+            const cats = await categorieData.json();
+            setCategorie(cats);
+        }
+        fetchData();
+
+    }, []);
+    // marque,categorie,dateSortie
     return (
         <>
             <div className="dashboard is-full-height">
@@ -63,11 +90,24 @@ function ComposantAnnonce({ ip }) {
                         </div>
                         <aside className="menu has-text-white">
                             <p className="menu-label">
-                                Marques populaires
+                                Marques
                             </p>
                             <ul className="menu-list">
-                                <li><a>Dashboard</a></li>
-                                <li><a>Customers</a></li>
+                                {marque && marque.map(item => (
+                                    <li key={item.idmarque}><a onClick={()=>
+                                    rechercherPar(`${ip}/annonce/marque/${item.idmarque}`,` ${item.nommarque}`)
+                                    }>{item.nommarque}</a></li>
+                                ))}
+                            </ul>
+                            <p className="menu-label">
+                                Categories
+                            </p>
+                            <ul className="menu-list">
+                                {categorie && categorie.map(item => (
+                                    <li key={item.idcategorie}><a onClick={()=>
+                                        rechercherPar(`${ip}/annonce/categorie/${item.idcategorie}`,` ${item.nomcategorie}`)
+                                        }>{item.nomcategorie}</a></li>
+                                ))}
                             </ul>
                         </aside>
                     </div>
@@ -87,49 +127,7 @@ function ComposantAnnonce({ ip }) {
                             <div className="column is-8 field is-grouped is-grouped-multiline">
                                 <div className="control is-hidden-touch">
                                     <div className="tags has-addons">
-                                        <div className="tag is-info">Technology</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">CSS</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Flexbox</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Web Design</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Open Source</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Community</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Documentation</div>
+                                        <div className="tag is-info">{filtre}</div>
                                         <a className="tag is-delete"></a>
                                     </div>
                                 </div>
@@ -156,12 +154,12 @@ function ComposantAnnonce({ ip }) {
                                             <div className="dropdown-menu" id="dropdown-menu6" role="menu">
                                                 <div className="dropdown-content">
                                                     <a href="#" className="dropdown-item" onClick={annoncesAnciennes}>
-                                                    Annonces plus anciennes
+                                                        Annonces plus anciennes
                                                     </a>
                                                     <a href="#" className="dropdown-item" onClick={annoncesRecentes}>
-                                                        Annonces les plus récentess
+                                                        Annonces les plus récentes
                                                     </a>
-                                                    
+
                                                     <a href="#" className="dropdown-item">
                                                         Prix: décroissant
                                                     </a>
