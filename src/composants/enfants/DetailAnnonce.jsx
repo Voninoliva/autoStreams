@@ -1,6 +1,10 @@
 import { useParams } from "react-router-dom";
 import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel.min.js';
 import { useEffect, useState, useRef } from "react";
+import PictureSwaper from "./PictureSwaper/PictureSwaper";
+import {Navigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 export function DetailAnnonce({ ip }) {
     const displayedImages = [
         'https://bulma.io/images/placeholders/1280x960.png',
@@ -73,16 +77,8 @@ export function DetailAnnonce({ ip }) {
                 const annonceDonnees = await fetch(url);
                 const vraieAnnonce = await annonceDonnees.json();
                 setAnnonce(vraieAnnonce);
-                console.log(url);
-                console.log(vraieAnnonce);
-                bulmaCarousel.attach('.carousel', {
-                    slidesToScroll: 1,
-                    slidesToShow: 2.15,
-                    pagination: false,
-                    infinite: true,
-                    autoplay: true
-                });
-
+                // console.log(url);
+                // console.log(vraieAnnonce);
                 if (vraieAnnonce != annonceData) {
                     const renderOptionsPromises = annonce.voiture.idoptions.map(async (detail, index) => {
                         const optionsResponse = await fetch(`${ip}/options/${detail}`);
@@ -101,17 +97,13 @@ export function DetailAnnonce({ ip }) {
         };
         fetchData();
     }, []);
-    // useEffect(()=>{
-    //     bulmaCarousel.attach('.carousel', {
-    //         slidesToScroll: 1,
-    //         slidesToShow: 2.15,
-    //         pagination: false,
-    //         infinite: true,
-    //         autoplay: true
-    //     });
-    // });
-    
 
+    useEffect(()=>{
+           console.log(" uploaded ",annonce)
+        },[annonce]);
+    function parlerAuVendeur(){
+
+    }
     return (
         <>
             <section className="section pt-6 mt-6">
@@ -204,28 +196,18 @@ export function DetailAnnonce({ ip }) {
                                 </blockquote>
 
                                 <div className="buttons is-right">
-                                    <button className="button is-info has-text-weight-semibold">
-                                        Confirmer
+                                    <button className="button is-info has-text-weight-semibold" onClick={parlerAuVendeur}>
+                                       Parler au vendeur
                                     </button>
-                                    <button className="button is-danger has-text-weight-semibold">
+                                    {/* <button className="button is-danger has-text-weight-semibold">
                                         Supprimer
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="tile is-6 carousel has-ribbon-top" style={{ overflowX: "hidden" }}>
-                        {annonce.voiture.photos.map((image, index) => (
-                            // console.log("un  ",image),
-                            <div key={index} className={`tile is-parent`}>
-                                <div className={`tile is-child item-${index + 1}`}>
-                                    <figure className="image is-3by5">
-                                        <img src={image} alt={`Placeholder image ${index + 1}`} />
-                                    </figure>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <PictureSwaper pictures={annonce.voiture.photos} />
+
                 </div>
             </section>
         </>

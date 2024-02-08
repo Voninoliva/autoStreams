@@ -7,7 +7,9 @@ import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel.min.js';
 import placeholderImage from '../assets/img/logins/login.jpg';
 import {Navigate} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 export default function Menu({ip}) {
+    const [loading, setLoading] = useState(false);
     function menuResponsive() {
         console.log("atooooo");
         const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
@@ -57,7 +59,7 @@ export default function Menu({ip}) {
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("ato fa ela be");
+        setLoading(true);
         const form = e.target;
         const formData = new FormData(form);
         const email = formData.get('email');
@@ -79,6 +81,7 @@ export default function Menu({ip}) {
                 const token = responseData.response.token;
                 localStorage.setItem('token',token);
                 console.log("token ",localStorage.getItem('token'));
+                closeModal();
                 navigate('/login');
             }
             else {
@@ -109,13 +112,13 @@ export default function Menu({ip}) {
 
                         <div className="navbar-menu" id="menu">
                             <div className="navbar-end">
-                                <a className="navbar-item is-tab is-hidden-desktop sign-in" onClick={openModal}>
+                                <a className="navbar-item is-tab is-hidden-desktop sign-in" id="sign-ins" onClick={openModal}>
                                     Mon profil
                                 </a>
                                 <a className="navbar-item is-tab is-hidden-desktop">
                                     Mes favoris
                                 </a>
-                                <a className="navbar-item is-tab is-hidden-desktop" href="message.html">
+                                <a className="navbar-item is-tab is-hidden-desktop" href="/messages">
                                     Mes messages
                                 </a>
                                 <div className="navbar-item">
@@ -130,7 +133,7 @@ export default function Menu({ip}) {
                                 </div>
                                 <div className="navbar-item is-hidden-touch">
                                     <div className="buttons is-right">
-                                        <a className="button is-rounded is-light has-text-info sign-in" onClick={openModal}>
+                                        <a className="button is-rounded is-light has-text-info sign-in"  id="sign-ins" onClick={openModal}>
                                             <span className="icon">
                                                 <i className="fa-regular fa-user fa-lg"></i>
                                             </span>
@@ -140,7 +143,7 @@ export default function Menu({ip}) {
                                                 <i className="fa-regular fa-heart fa-lg"></i>
                                             </span>
                                         </div>
-                                        <a href="message.html" className="button is-rounded is-light has-text-info">
+                                        <a  href="/messages" className="button is-rounded is-light has-text-info">
                                             <span className="icon">
                                                 <i className="fa-regular fa-paper-plane fa-lg"></i>
                                             </span>
@@ -185,7 +188,9 @@ export default function Menu({ip}) {
                                         </figure>
                                     </div>
                                     <div className="field">
-                                        <label className="label">E-mail</label>
+                                        <label className="label">
+                                        {loading && <p>En cours de chargement...</p>}
+                                            E-mail</label>
                                         <div className="control">
                                             <input type="email" className="input" placeholder="Entrez votre adresse e-mail" name='email'/>
                                         </div>

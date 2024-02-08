@@ -30,7 +30,7 @@ function ComposantAnnonce({ ip }) {
                 const allAnnonce = await allAnnonceData.json();
                 const retournees = () => {
                     return  allAnnonce.map((detail,index)=>(
-                        <UneAnnonce data={detail.annonce?detail.annonce:detail} key={index}/>
+                        <UneAnnonce data={detail.annonce?detail.annonce:detail} key={index} ip={ip}/>
                     ));
                 }
                 setRender(retournees);
