@@ -8,6 +8,7 @@ import 'bulma-list/css/bulma-list.css';
 import { DetailAnnonce } from './composants/enfants/DetailAnnonce';
 import Login from './composants/Login';
 import Message from './composants/Message';
+import Profil from './composants/Profil';
 import 'swiper/css';
 import "swiper/css/navigation"
 
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route exact path='/' element={<ComposantAnnonce ip={ip} />} />
           <Route path="/detailAnnonce/:idannonce" element={<DetailAnnonce ip={ip} />} />
+          <Route path="/profil" element={<Profil ip={ip} />} />
           <Route path="/login" element={<Login ip={ip} />} />
           <Route path='/messages' element={<Message data={null}/>}/>
         </Routes>

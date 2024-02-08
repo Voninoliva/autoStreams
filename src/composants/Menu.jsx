@@ -9,6 +9,7 @@ import {Navigate} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export default function Menu({ip}) {
+    const token=localStorage.getItem('token');
     const [loading, setLoading] = useState(false);
     function menuResponsive() {
         console.log("atooooo");
@@ -42,13 +43,20 @@ export default function Menu({ip}) {
             item.classList.add('is-hidden');
         });
     }
+    const navigate0 = useNavigate();
     function openModal() {
-        const modal = document.querySelector('.modal');
-        const signIn = document.querySelectorAll('.sign-in');
-        signIn.forEach((item) => {
-            modal.classList.add('is-active');
-            initCarouselLogin();
-        });
+        if(token!=null){
+            navigate0('/profil');
+        }
+        else{
+            const modal = document.querySelector('.modal');
+            const signIn = document.querySelectorAll('.sign-in');
+            signIn.forEach((item) => {
+                modal.classList.add('is-active');
+                initCarouselLogin();
+            });
+        }
+        
     }
     function closeModal() {
         const modal = document.querySelector('.modal');
@@ -82,7 +90,7 @@ export default function Menu({ip}) {
                 localStorage.setItem('token',token);
                 console.log("token ",localStorage.getItem('token'));
                 closeModal();
-                navigate('/login');
+                navigate('/profil');
             }
             else {
                 alert('Échec de la connexion', JSON.stringify(response));

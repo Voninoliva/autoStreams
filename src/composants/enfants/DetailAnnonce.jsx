@@ -86,8 +86,6 @@ export function DetailAnnonce({ ip }) {
                 const annonceDonnees = await fetch(url);
                 const vraieAnnonce = await annonceDonnees.json();
                 setAnnonce(vraieAnnonce);
-                // console.log(url);
-                // console.log(vraieAnnonce);
                 if (vraieAnnonce != annonceData) {
                     const renderOptionsPromises = annonce.voiture.idoptions.map(async (detail, index) => {
                         const optionsResponse = await fetch(`${ip}/options/${detail}`);
