@@ -7,6 +7,8 @@ function ComposantAnnonce({ ip }) {
     const [marque, setMarque] = useState(null);
     const [categorie, setCategorie] = useState(null);
     const [filtre,setFiltre] = useState('Toutes les annonces');
+    const [sliceNumberMinMarque,setSliceNumberM] = useState(3);
+    const [sliceNumberMinCategorie,setSliceNumberC] = useState(3);
     document.addEventListener('load', () => {
         document.querySelector('.pageloader').classList.add('is-active');
     });
@@ -93,21 +95,37 @@ function ComposantAnnonce({ ip }) {
                                 Marques
                             </p>
                             <ul className="menu-list">
-                                {marque && marque.map(item => (
+                                {marque && marque.slice(0,sliceNumberMinMarque).map(item => (
                                     <li key={item.idmarque}><a onClick={()=>
                                     rechercherPar(`${ip}/annonce/marque/${item.idmarque}`,` ${item.nommarque}`)
                                     }>{item.nommarque}</a></li>
                                 ))}
+                               
+                                    {marque && sliceNumberMinMarque==3?
+                                     <li className='button is-info is-light'><a onClick={()=>{
+                                        setSliceNumberM(marque.length)
+                                     }}>Voir plus +</a></li>
+                                    :<li className='button is-info is-light'><a  onClick={()=>{
+                                        setSliceNumberM(3)
+                                    }}>Voir moins -</a> </li>}
+                                
                             </ul>
-                            <p className="menu-label">
+                            <p className="menu-label is-info">
                                 Categories
                             </p>
                             <ul className="menu-list">
-                                {categorie && categorie.map(item => (
+                                {categorie && categorie.slice(0,sliceNumberMinCategorie).map(item => (
                                     <li key={item.idcategorie}><a onClick={()=>
                                         rechercherPar(`${ip}/annonce/categorie/${item.idcategorie}`,` ${item.nomcategorie}`)
                                         }>{item.nomcategorie}</a></li>
                                 ))}
+                               {categorie && sliceNumberMinCategorie==3?
+                                     <li className='button is-info is-light'><a onClick={()=>{
+                                        setSliceNumberC(categorie.length)
+                                     }}>Voir plus +</a></li>
+                                    :<li className='button is-info is-light'><a  onClick={()=>{
+                                        setSliceNumberC(3)
+                                    }}>Voir moins -</a> </li>}
                             </ul>
                         </aside>
                     </div>

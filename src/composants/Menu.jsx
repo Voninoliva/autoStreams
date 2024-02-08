@@ -4,10 +4,13 @@ import '../assets/css/style.css';
 import '../assets/js/myscript';
 import logo from '../assets/img/logo.png';
 import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel.min.js';
-import placeholderImage from '../assets/img/logins/login.jpg';
 import {Navigate} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+
+import logo0 from '../assets/img/logins/login0.png';
+import logo1 from '../assets/img/logins/login1.png';
+import logo2 from '../assets/img/logins/login2.png';
 export default function Menu({ip}) {
     const token=localStorage.getItem('token');
     const [loading, setLoading] = useState(false);
@@ -93,7 +96,7 @@ export default function Menu({ip}) {
                 navigate('/profil');
             }
             else {
-                alert('Échec de la connexion', JSON.stringify(response));
+                // alert('Échec de la connexion', JSON.stringify(response));
             }
         }
         catch (error) {
@@ -120,11 +123,11 @@ export default function Menu({ip}) {
 
                         <div className="navbar-menu" id="menu">
                             <div className="navbar-end">
+                            <a className="navbar-item is-tab is-hidden-desktop" href='/'>
+                                    Toutes les annonces
+                                </a>
                                 <a className="navbar-item is-tab is-hidden-desktop sign-in" id="sign-ins" onClick={openModal}>
                                     Mon profil
-                                </a>
-                                <a className="navbar-item is-tab is-hidden-desktop">
-                                    Mes favoris
                                 </a>
                                 <a className="navbar-item is-tab is-hidden-desktop" href="/messages">
                                     Mes messages
@@ -141,16 +144,18 @@ export default function Menu({ip}) {
                                 </div>
                                 <div className="navbar-item is-hidden-touch">
                                     <div className="buttons is-right">
-                                        <a className="button is-rounded is-light has-text-info sign-in"  id="sign-ins" onClick={openModal}>
+                                    <a className="button is-rounded is-light has-text-info" href='/'>
                                             <span className="icon">
-                                                <i className="fa-regular fa-user fa-lg"></i>
+                                            <i className="fa-solid fa-scroll fa-lg"></i>
                                             </span>
                                         </a>
-                                        <div className="button is-rounded is-light has-text-info">
+                                        <a className="button is-rounded is-light has-text-info sign-in"  id="sign-ins" onClick={openModal}>
                                             <span className="icon">
-                                                <i className="fa-regular fa-heart fa-lg"></i>
+                                                {token?
+                                                <i className="fa-solid fa-user-gear"></i>
+                                                :<i className="fa-regular fa-user fa-lg"></i>}
                                             </span>
-                                        </div>
+                                        </a>
                                         <a  href="/messages" className="button is-rounded is-light has-text-info">
                                             <span className="icon">
                                                 <i className="fa-regular fa-paper-plane fa-lg"></i>
@@ -166,23 +171,23 @@ export default function Menu({ip}) {
             <div className="modal">
                 <div className="modal-background"></div>
                 <div className="modal-content">
-                    <div className="box" style={{ overflowY: "hidden", height: "590px" }}>
-                        <div className="columns">
+                    <div className="box" style={{ overflowY: "hidden", height: "590px",paddingBottom:"15%" }}>
+                        <div className="columns mb-5">
                             <div className="column is-8 p-0 is-hidden-touch">
                                 <div className="carousel-login" style={{ overflowX: "hidden" }}>
                                     <div className="item-1">
                                         <figure className="image is-4by3">
-                                            <img src={placeholderImage} alt="Placeholder image" />
+                                            <img src={logo0} alt="Placeholder image" />
                                         </figure>
                                     </div>
                                     <div className="item-2">
                                         <figure className="image is-4by3">
-                                            <img src="assets/img/undraw_city_driver_re_9xyv.svg" alt="Placeholder image" />
+                                            <img src={logo1} alt="Placeholder image" />
                                         </figure>
                                     </div>
                                     <div className="item-3">
                                         <figure className="image is-4by3">
-                                            <img src="assets/img/undraw_delivery_truck_vt6p.png" alt="Placeholder image" />
+                                            <img src={logo2} alt="Placeholder image" />
                                         </figure>
                                     </div>
                                 </div>
@@ -197,7 +202,7 @@ export default function Menu({ip}) {
                                     </div>
                                     <div className="field">
                                         <label className="label">
-                                        {loading && <p>En cours de chargement...</p>}
+                                        {loading && <p >En cours de chargement...</p>}
                                             E-mail</label>
                                         <div className="control">
                                             <input type="email" className="input" placeholder="Entrez votre adresse e-mail" name='email'/>

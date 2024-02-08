@@ -14,7 +14,7 @@ import "swiper/css/navigation"
 
 function App() {
   const ip = "https://back-autostream-production.up.railway.app";
-  localStorage.removeItem('token');
+  // localStorage.removeItem('token');
   const token = localStorage.getItem('token');
   console.log("token   ",token);
   return (
