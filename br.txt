@@ -1,0 +1,24 @@
+if (fichier && fichier.type.startsWith('image/')) {
+      lireContenuImage(fichier)
+        .then(async ({ bytesArray, blob }) => {
+          const jsonData = {
+            nommarque: marque,
+            continent : {
+              idcontinent: idcontinent,
+              nomcontinent:null
+            },
+            photo: bytesArray, // Vous pouvez également utiliser blob ici si nécessaire,
+          };
+          // formData0.append('marque', marque);new Blob([bytesArray], { type: 'image/png' }), 'nomDuFichier.png'
+          // formData0.append('continent[idcontinent]', idcontinent);
+          // formData0.append('continent[nomcontinent]', null);
+          // formData0.append('photo',bytesArray );
+          const responseData = await submitData(api, jsonData);
+
+        })
+        .catch((error) => {
+          alert('Erreur lors de la lecture de l\'image: ' + error);
+        });
+    } else {
+      alert('Aucune image valide sélectionnée');
+    }

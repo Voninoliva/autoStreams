@@ -3,46 +3,82 @@ import '../assets/css/style.css';
 import { useEffect, useState } from 'react';
 import UneAnnonce from './enfants/UneAnnonce';
 function ComposantAnnonce({ ip }) {
-   const url=`${ip}/validation/etat/1`;
+    const [url, setUrl] = useState(`${ip}/validation/etat/1`);
+    const [marque, setMarque] = useState(null);
+    const [categorie, setCategorie] = useState(null);
+    const [filtre,setFiltre] = useState('Toutes les annonces');
+    const [sliceNumberMinMarque,setSliceNumberM] = useState(3);
+    const [sliceNumberMinCategorie,setSliceNumberC] = useState(3);
     document.addEventListener('load', () => {
         document.querySelector('.pageloader').classList.add('is-active');
     });
-    function ouvrirFlitre(){
+    function ouvrirFlitre() {
         const dashboardPanel = document.querySelector('.dashboard-panel');
         dashboardPanel.classList.toggle('is-active');
     }
-    function fermerFiltre(){
+    function fermerFiltre() {
         const dashboardPanel = document.querySelector('.dashboard-panel');
         dashboardPanel.classList.remove('is-active');
-    } 
-  const[renderDetails,setRender] = useState([]);
-    useEffect(()=>{
-        async function fetchData(){
-            try{
+    }
+    function annoncesRecentes() {
+        setUrl(`${ip}/annonce/recentes`);
+        setFiltre('Tri par annonces les plus recentes');
+    }
+    function annoncesAnciennes() {
+        setUrl(`${ip}/annonce/anciennes`);
+        setFiltre('Tri par annonces les plus anciennes');
+    }
+    function rechercherPar(thisurl,titre){
+        setFiltre(titre);
+        setUrl(thisurl);
+    }
+    const [renderDetails, setRender] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            try {
                 const allAnnonceData = await fetch(url);
                 const allAnnonce = await allAnnonceData.json();
-                const retournees = () => {
-                    return  allAnnonce.map((detail,index)=>(
-                        <UneAnnonce data={detail} key={index}/>
-                    ));
+                var retournees = null;
+                if(allAnnonce.content){
+                     retournees = () => {
+                        return allAnnonce.content.map((detail, index) => (
+                            <UneAnnonce data={detail.annonce ? detail.annonce : detail} key={index} ip={ip} />
+                        ));
+                    }
                 }
+                else{
+                    retournees = () => {
+                        return allAnnonce.map((detail, index) => (
+                            <UneAnnonce data={detail.annonce ? detail.annonce : detail} key={index} ip={ip} />
+                        ));
+                    }
+                }
+               
                 setRender(retournees);
+
             }
             catch (error) {
                 console.log('Error fetching data:', error);
             }
         }
-       
+
         fetchData();
-    },[]);
-    useEffect(()=>{
-        bulmaCarousel.attach('.carousel', {
-            initialSlide: 1,
-            slidesToScroll: 1,
-            slidesToShow: 1,
-            navigation: false,
-        });
-    });
+    }, [url]);
+    useEffect(() => {
+        async function fetchData() {
+
+            const urlMarque = `${ip}/marque`;
+            const marqueData = await fetch(urlMarque);
+            const marques = await marqueData.json();
+            setMarque(marques);
+            const categorieData = await fetch(`${ip}/categorie`);
+            const cats = await categorieData.json();
+            setCategorie(cats);
+        }
+        fetchData();
+
+    }, []);
+    // marque,categorie,dateSortie
     return (
         <>
             <div className="dashboard is-full-height">
@@ -56,11 +92,40 @@ function ComposantAnnonce({ ip }) {
                         </div>
                         <aside className="menu has-text-white">
                             <p className="menu-label">
-                                Marques populaires
+                                Marques
                             </p>
                             <ul className="menu-list">
-                                <li><a>Dashboard</a></li>
-                                <li><a>Customers</a></li>
+                                {marque && marque.slice(0,sliceNumberMinMarque).map(item => (
+                                    <li key={item.idmarque}><a onClick={()=>
+                                    rechercherPar(`${ip}/annonce/marque/${item.idmarque}`,` ${item.nommarque}`)
+                                    }>{item.nommarque}</a></li>
+                                ))}
+                               
+                                    {marque && sliceNumberMinMarque==3?
+                                     <li className='button is-info is-light'><a onClick={()=>{
+                                        setSliceNumberM(marque.length)
+                                     }}>Voir plus +</a></li>
+                                    :<li className='button is-info is-light'><a  onClick={()=>{
+                                        setSliceNumberM(3)
+                                    }}>Voir moins -</a> </li>}
+                                
+                            </ul>
+                            <p className="menu-label is-info">
+                                Categories
+                            </p>
+                            <ul className="menu-list">
+                                {categorie && categorie.slice(0,sliceNumberMinCategorie).map(item => (
+                                    <li key={item.idcategorie}><a onClick={()=>
+                                        rechercherPar(`${ip}/annonce/categorie/${item.idcategorie}`,` ${item.nomcategorie}`)
+                                        }>{item.nomcategorie}</a></li>
+                                ))}
+                               {categorie && sliceNumberMinCategorie==3?
+                                     <li className='button is-info is-light'><a onClick={()=>{
+                                        setSliceNumberC(categorie.length)
+                                     }}>Voir plus +</a></li>
+                                    :<li className='button is-info is-light'><a  onClick={()=>{
+                                        setSliceNumberC(3)
+                                    }}>Voir moins -</a> </li>}
                             </ul>
                         </aside>
                     </div>
@@ -80,49 +145,7 @@ function ComposantAnnonce({ ip }) {
                             <div className="column is-8 field is-grouped is-grouped-multiline">
                                 <div className="control is-hidden-touch">
                                     <div className="tags has-addons">
-                                        <div className="tag is-info">Technology</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">CSS</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Flexbox</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Web Design</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Open Source</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Community</div>
-                                        <a className="tag is-delete"></a>
-                                    </div>
-                                </div>
-
-                                <div className="control is-hidden-touch">
-                                    <div className="tags has-addons">
-                                        <div className="tag is-info">Documentation</div>
+                                        <div className="tag is-info">{filtre}</div>
                                         <a className="tag is-delete"></a>
                                     </div>
                                 </div>
@@ -148,12 +171,13 @@ function ComposantAnnonce({ ip }) {
                                             </div>
                                             <div className="dropdown-menu" id="dropdown-menu6" role="menu">
                                                 <div className="dropdown-content">
-                                                    <a href="#" className="dropdown-item">
-                                                        En vedette
+                                                    <a href="#" className="dropdown-item" onClick={annoncesAnciennes}>
+                                                        Annonces plus anciennes
                                                     </a>
-                                                    <a href="#" className="dropdown-item">
-                                                        Annonces les plus récentess
+                                                    <a href="#" className="dropdown-item" onClick={annoncesRecentes}>
+                                                        Annonces les plus récentes
                                                     </a>
+
                                                     <a href="#" className="dropdown-item">
                                                         Prix: décroissant
                                                     </a>
