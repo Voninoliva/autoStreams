@@ -141,6 +141,7 @@ export function DetailAnnonce({ ip }) {
                                 <div className="content">
                                     <h3 className="has-text-info">A propos</h3>
                                     <ul>
+                                        <li><strong>Categorie</strong> {annonce.voiture.modele.categorie.nomcategorie}</li>
                                         <li><strong>Energie</strong> {annonce.voiture.energie.nomenergie}</li>
                                         <li><strong>Transmission</strong> {annonce.voiture.transmission.nomtransmission}</li>
                                         <li><strong>Drive Type</strong> {annonce.voiture.drivetype.nomdrivetype}</li>
