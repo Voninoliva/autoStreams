@@ -177,13 +177,6 @@ function ComposantAnnonce({ ip }) {
                                                     <a href="#" className="dropdown-item" onClick={annoncesRecentes}>
                                                         Annonces les plus récentes
                                                     </a>
-
-                                                    <a href="#" className="dropdown-item">
-                                                        Prix: décroissant
-                                                    </a>
-                                                    <a href="#" className="dropdown-item">
-                                                        Prix: croissant
-                                                    </a>
                                                 </div>
                                             </div>
                                         </div>

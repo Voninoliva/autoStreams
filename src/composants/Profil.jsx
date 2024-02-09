@@ -13,6 +13,9 @@ export default function Profil({ ip }) {
     const [composantAAfficher,setIdComposant] = useState(0);
     const [renderDetails, setRender] = useState([]);
     const[titre,setTitre] = useState('Toutes ses annonces');
+    const [email,setEmail] = useState('');
+    const [nombreFavori,setNbFav] = useState('aucun');
+    const[nba,setNbA] = useState('vide');
     function changerLien(){
         setUrl(`${ip}/annonce/historique`);
         setIdComposant(0);
@@ -40,7 +43,6 @@ export default function Profil({ ip }) {
                             'Authorization': `Bearer ${token}`, 
                         }    
                     });
-                    console.log(response);
                     if (response.ok) {
                         const responseData = await response.json();
                         if(composantAAfficher==0){
@@ -58,7 +60,43 @@ export default function Profil({ ip }) {
                             }
                         }
                         setRender(retournees);
-                        console.log(responseData);
+                        
+                    }
+                    const personneData = await fetch(`${ip}/login/profil`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`, 
+                        }    
+                    });
+                    if(personneData.ok){
+                        const pers = await personneData.json();
+                       setEmail(pers.email);
+                    }
+
+
+                    // le resaka little dashboard
+                    const nbFav = await fetch(`${ip}/favori`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`, 
+                        }    
+                    });
+                    if(nbFav.ok){
+                        const nbb =await nbFav.json();
+                        setNbFav(nbb.length);
+                    }
+                    const nbannonces = await fetch(`${ip}/annonce/historique`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`, 
+                        }    
+                    });
+                    if(nbannonces.ok){
+                        const a = await nbannonces.json();
+                        setNbA(a.length);
                     }
                 }
             }
@@ -78,22 +116,6 @@ function deconnexion(){
         {/* <section className="section pt-6 mt-6"> */}
             <h1>Profil</h1>
             <div className="dashboard is-full-height">
-            {/* <div className="dashboard-panel is-small is-scrollable has-background-info " style={{position:'inherit',transform:"translateX(0%)"}}>
-                <header className="dashboard-panel-header">
-                    
-                </header>
-                <div className="dashboard-panel-content">
-                </div>
-                <footer className="dashboard-panel-footer">
-                    <div className="field">
-                        <div className="control is-expanded">
-                            <button className="button is-fullwidth is-danger">
-                                Se deconnecter
-                            </button>
-                        </div>
-                    </div>
-                </footer>
-            </div> */}
             <div className="dashboard-main is-scrollable">
             <section className="section pt-6 mt-6 p-5">
                 <div className="content is-flex is-justify-content-space-between filter has-background-white py-3">
@@ -131,16 +153,18 @@ function deconnexion(){
                 </div>
             </section>
         </div>
-            <div className="dashboard-panel is-small has-background-white is-hidden-touch pl-0" style={{position:'inherit',transform:"translateX(0%)"}}>
+            <div className="dashboard-panel has-background-white is-hidden-touch pl-0" style={{position:'inherit',transform:"translateX(0%)"}}>
                 <header className="dashboard-panel-header">
 
                 </header>
                 <div className="dashboard-panel-content">
                     <div className="has-background-info box mt-5" style={{ height: "216px" }}></div>
                     <div className="box"><a onClick={deconnexion}>Deconnexion</a></div>
-                    <div className="box"></div>
-                    <div className="box"></div>
-                    <div className="box"></div>
+                    <div className="box">
+                        <p> <strong>Email : </strong> {email}</p>
+                        <p> <strong> Nombre d'annonces publiees : </strong>{nba}</p>
+                        <p><strong> Nombre d'annonces favoris :</strong> {nombreFavori}</p>
+                        </div>
                 </div>
             </div>
         </div>

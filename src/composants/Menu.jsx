@@ -222,14 +222,14 @@ export default function Menu({ip}) {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="is-divider" data-content="OU"></div>
+                                    {/* <div className="is-divider" data-content="OU"></div>
                                     <div className="field">
                                         <div className="control">
                                             <button className="button is-fullwidth is-info is-outlined has-text-weight-bold disable">
                                                 Continuer avec Google
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </form>
                         </div>
