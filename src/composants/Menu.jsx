@@ -129,7 +129,7 @@ export default function Menu({ip}) {
                                 <a className="navbar-item is-tab is-hidden-desktop sign-in" id="sign-ins" onClick={openModal}>
                                     Mon profil
                                 </a>
-                                <a className="navbar-item is-tab is-hidden-desktop" href="/messages">
+                                <a className="navbar-item is-tab is-hidden-desktop" href="/message">
                                     Mes messages
                                 </a>
                                 <div className="navbar-item">
@@ -156,7 +156,7 @@ export default function Menu({ip}) {
                                                 :<i className="fa-regular fa-user fa-lg"></i>}
                                             </span>
                                         </a>
-                                        <a  href="/messages" className="button is-rounded is-light has-text-info">
+                                        <a  href="/message" className="button is-rounded is-light has-text-info">
                                             <span className="icon">
                                                 <i className="fa-regular fa-paper-plane fa-lg"></i>
                                             </span>
