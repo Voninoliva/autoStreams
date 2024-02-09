@@ -73,7 +73,7 @@ export default function Profil({ ip }) {
         {/* <section className="section pt-6 mt-6"> */}
             <h1>Profil</h1>
             <div className="dashboard is-full-height">
-            <div className="dashboard-panel is-small is-scrollable has-background-info " style={{position:'inherit',transform:"translateX(0%)"}}>
+            {/* <div className="dashboard-panel is-small is-scrollable has-background-info " style={{position:'inherit',transform:"translateX(0%)"}}>
                 <header className="dashboard-panel-header">
                     
                 </header>
@@ -88,7 +88,7 @@ export default function Profil({ ip }) {
                         </div>
                     </div>
                 </footer>
-            </div>
+            </div> */}
             <div className="dashboard-main is-scrollable">
             <section className="section pt-6 mt-6 p-5">
                 <div className="content is-flex is-justify-content-space-between filter has-background-white py-3">

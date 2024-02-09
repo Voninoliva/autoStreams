@@ -205,13 +205,13 @@ export default function Menu({ip}) {
                                         {loading && <p >En cours de chargement...</p>}
                                             E-mail</label>
                                         <div className="control">
-                                            <input type="email" className="input" placeholder="Entrez votre adresse e-mail" name='email'/>
+                                            <input type="email" className="input" placeholder="Entrez votre adresse e-mail" name='email' defaultValue='jeremie@gmail.com'/>
                                         </div>
                                     </div>
                                     <div className="field">
                                         <label className="label">Mot de passe</label>
                                         <div className="control">
-                                            <input type="password" className="input" placeholder="Entrez votre mot de passe" name='pwd'/>
+                                            <input type="password" className="input" placeholder="Entrez votre mot de passe" name='pwd' defaultValue='1234'/>
                                         </div>
                                     </div>
                                     <br />
