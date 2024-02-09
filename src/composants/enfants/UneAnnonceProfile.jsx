@@ -2,15 +2,16 @@ import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel.min.js';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSubmitDataToken } from '../generalise';
-export default function UneAnnonce({ data,ip }) {  
-    useEffect(()=>{
+export default function UneAnnonceProfile({ data, ip, etat }) {
+    console.log("atoooo");
+    useEffect(() => {
         bulmaCarousel.attach('.carousel', {
             initialSlide: 1,
             slidesToScroll: 1,
             slidesToShow: 1,
             navigation: false,
         });
-    },[])
+    }, [])
     const token = localStorage.getItem('token');
     const voiture = data.voiture;
     const imageRenders = () => {
@@ -23,27 +24,22 @@ export default function UneAnnonce({ data,ip }) {
             </div>
         ));
     }
-    function parlerAuVendeur(){
-        const idutilisateur = data.idutilisateur;
-        // ao amin le composant ato koa miantso an le verfication utilisateur
-
-    }
     const navigate = useNavigate();
     const envoyer = useSubmitDataToken();
     const lien = `${ip}/favori`;
-    async function addOnFavList(){
-        if(token ==null){
+    async function addOnFavList() {
+        if (token == null) {
             document.querySelector("#sign-ins").click();
         }
-        else{
+        else {
             console.log("ajout au favori");
             const objetAEnvoyer = {
-                "annonce":{
-                    "idannonce":data.idannonce
+                "annonce": {
+                    "idannonce": data.idannonce
                 }
             }
             console.log(JSON.stringify(objetAEnvoyer));
-            const reponse=await envoyer(lien,objetAEnvoyer,token);
+            const reponse = await envoyer(lien, objetAEnvoyer, token);
 
         }
     }
@@ -61,16 +57,22 @@ export default function UneAnnonce({ data,ip }) {
                         <div className="list has-visible-pointer-controls has-overflow-ellipsis">
                             <div className="list-item">
                                 <div className="list-item-content">
-                                <span className='tag'>MGA {data.prix.toLocaleString('fr-FR')}</span>
+                                    <span className='tag'>MGA {data.prix.toLocaleString('fr-FR')}</span>
                                     <div className="list-item-title has-text-info">{voiture.modele.nommodele} de {voiture.modele.marque.nommarque}</div>
                                     <div className="list-item-description help">{data.descri}</div>
                                 </div>
                                 <div className="list-item-controls has-text-info">
-                                    <a className="icon is-clickable like" onClick={addOnFavList}>
+                                    {/* <a className="icon is-clickable like" onClick={addOnFavList}>
                                         <i className="fa-regular fa-heart fa-lg"></i>
-                                    </a>
-                                    <a className="icon is-clickable" onClick={parlerAuVendeur}>
-                                        <i className="fa-regular fa-paper-plane fa-lg"></i>
+                                    </a> */}
+                                    <a className="icon is-clickable">
+                                        {etat == 3?
+
+
+                                            <i className="fa-solid fa-building-circle-check fa-lg"></i>
+                                        :etat == 1}{
+                                            <i className="fa-solid fa-clock fa-lg"></i>
+                                        }
                                     </a>
                                 </div>
                             </div>

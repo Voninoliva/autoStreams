@@ -65,6 +65,7 @@ export default function Menu({ip}) {
         const modal = document.querySelector('.modal');
         const closeModal = document.querySelector('.modal-close');
         modal.classList.remove('is-active');
+        navigate0('/');
     }
     const v = `${ip}/login/auth`;
     const navigate = useNavigate();
@@ -91,12 +92,11 @@ export default function Menu({ip}) {
                 const responseData = await response.json();
                 const token = responseData.response.token;
                 localStorage.setItem('token',token);
-                console.log("token ",localStorage.getItem('token'));
                 closeModal();
                 navigate('/profil');
             }
             else {
-                // alert('Échec de la connexion', JSON.stringify(response));
+                navigate('/');
             }
         }
         catch (error) {

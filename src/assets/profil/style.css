@@ -1,0 +1,80 @@
+.columns.is-mobile {
+    position: sticky;
+    top: 50px;
+    z-index: 2;
+}
+
+.filter {
+    position: sticky;
+    top: 50px;
+    z-index: 2;
+}
+
+/* .dashboard-panel.is-active {
+    transform: translateX(0%);
+
+    .dashboard-main {
+        position: absolute;
+    }
+}
+
+.dashboard-panel {
+    position: absolute;
+    transform: translateX(-100%);
+    transition: 350ms ease;
+    z-index: 1;
+}
+
+.dashboard-panel.is-small {
+    width: 15rem;
+}
+
+.dashboard-main {
+    position: relative;
+    transform: translateX(0%);
+    transition: 350ms ease;
+} */
+
+
+.card {
+    .fa-car-side {
+        transform: translateX(-27.5px);
+        transition: 350ms ease;
+    }
+}
+
+.card:hover {
+    transform: scale(1.025);
+    transition: 350ms ease;
+
+    .fa-car-side {
+        transform: translateX(0);
+        transition: 350ms ease;
+    }
+}
+
+.hero-head {
+    top: 50px;
+    position: sticky;
+    z-index: 2;
+}
+
+.hero-foot {
+    position: sticky;
+    z-index: 2;
+    bottom: 0;
+}
+
+.media+.media {
+    border-top: none;
+}
+
+.message {
+    max-width: fit-content;
+    width: 87.5%;
+    border-radius: 20px;
+}
+
+.message-body {
+    border-radius: 20px;
+}

@@ -9,10 +9,10 @@ import { DetailAnnonce } from './composants/enfants/DetailAnnonce';
 import Login from './composants/Login';
 import Message from './composants/Message';
 import Profil from './composants/Profil';
+import MessageEntreUser from './composants/MessageEntreUser';
 import 'swiper/css';
 import "swiper/css/navigation"
 
-import MessageEntreUser from './composants/MessageEntreUser';
 function App() {
   const ip = "https://back-autostream-production.up.railway.app";
   // localStorage.removeItem('token');

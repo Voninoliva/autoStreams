@@ -1,8 +1,8 @@
 import bulmaCarousel from 'bulma-carousel/dist/js/bulma-carousel.min.js';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSubmitDataToken } from '../generalise';
-export default function UneAnnonce({ data,ip }) {  
+import { useDeleteDataToken } from '../generalise';
+export default function UneAnnonceFavori({data,ip}){
     useEffect(()=>{
         bulmaCarousel.attach('.carousel', {
             initialSlide: 1,
@@ -29,7 +29,7 @@ export default function UneAnnonce({ data,ip }) {
 
     }
     const navigate = useNavigate();
-    const envoyer = useSubmitDataToken();
+    const envoyer = useDeleteDataToken();
     const lien = `${ip}/favori`;
     async function addOnFavList(){
         if(token ==null){
@@ -67,11 +67,11 @@ export default function UneAnnonce({ data,ip }) {
                                 </div>
                                 <div className="list-item-controls has-text-info">
                                     <a className="icon is-clickable like" onClick={addOnFavList}>
-                                        <i className="fa-regular fa-heart fa-lg"></i>
+                                        <i className="fa-solid fa-heart fa-lg"></i>
                                     </a>
-                                    <a className="icon is-clickable" onClick={parlerAuVendeur}>
+                                    {/* <a className="icon is-clickable"  onClick={parlerAuVendeur}>
                                         <i className="fa-regular fa-paper-plane fa-lg"></i>
-                                    </a>
+                                    </a> */}
                                 </div>
                             </div>
                         </div>
