@@ -26,6 +26,9 @@ const MessageEntreUser = () => {
         if (storedToken) {
             setToken(storedToken);
         }
+        else{
+            document.querySelector("#sign-ins").click();
+        }
     }, []); 
 
     useEffect(() => {

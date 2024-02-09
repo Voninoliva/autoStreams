@@ -67,7 +67,12 @@ export default function Profil({ ip }) {
             }
         }
         fetchData();
-    },[url])
+    },[url]);
+function deconnexion(){
+    localStorage.clear();
+    console.log("deconnexion");
+    navigate('/');
+}
     return (
         <>
         {/* <section className="section pt-6 mt-6"> */}
@@ -132,7 +137,7 @@ export default function Profil({ ip }) {
                 </header>
                 <div className="dashboard-panel-content">
                     <div className="has-background-info box mt-5" style={{ height: "216px" }}></div>
-                    <div className="box"></div>
+                    <div className="box"><a onClick={deconnexion}>Deconnexion</a></div>
                     <div className="box"></div>
                     <div className="box"></div>
                     <div className="box"></div>
