@@ -29,6 +29,7 @@ function App() {
           <Route path="/login" element={<Login ip={ip} />} />
           <Route path='/messages' element={<Message data={null}/>}/>
           <Route path="/message" element={<MessageEntreUser />} />
+          <Route path="/message/:idVendeur" element={<MessageEntreUser />} />
         </Routes>
       </Router>
 

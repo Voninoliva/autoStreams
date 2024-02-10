@@ -105,11 +105,18 @@ export function DetailAnnonce({ ip }) {
         fetchData();
     }, []);
 
-    // useEffect(()=>{
-    //        console.log(" uploaded ",annonce)
-    //     },[annonce]);
-    function parlerAuVendeur() {
+    const navigate = useNavigate();
 
+    const token = localStorage.getItem('token');
+    function parlerAuVendeur() {
+        const idutilisateur = annonce.idutilisateur;
+        // console.log(idutilisateur);
+        // ao amin le composant ato koa miantso an le verfication utilisateur
+        if (token == null) {
+            document.querySelector("#sign-ins").click();
+        } else {
+            navigate(`/message/${ idutilisateur }`);
+        }
     }
     return (
         <>

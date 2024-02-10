@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useState, useEffect } from 'react';
 import ListConversation from './list-conversation';
 import Message from './Messages';
+import { useParams } from 'react-router';
 
 
 
@@ -12,6 +13,10 @@ const api = axios.create({
 })
 
 const MessageEntreUser = () => {
+
+    const { idVendeur } = useParams();
+
+
     const [messages, setMessages] = useState([]);
     const [token, setToken] = useState('');
     const [mailToken, setMailToken] = useState('');
@@ -20,27 +25,49 @@ const MessageEntreUser = () => {
     const [message, setMessage] = useState('');
     const [utilisateurDejaParler, setUtilisateurDejaParler] = useState([]);
     const [nomInterlocuteur, setNomInterlocuteur] = useState('');
-    
+    const [vendeur, setVendeur] = useState('');
+
+
+    useEffect(() => {
+        if (!idVendeur) return;
+
+        setIdReceive(idVendeur);
+        // console.log("tafiditra");
+
+    }, [idVendeur]);
+
+
+    const conversation = () => {
+        // console.log("conversation");
+        fetchData(idReceive);
+    }
+
+    useEffect(() => {
+        if (idReceive != '') {
+            conversation();
+        }
+    }, [idReceive])
+
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
             setToken(storedToken);
         }
-        else{
+        else {
             document.querySelector("#sign-ins").click();
         }
-    }, []); 
+    }, []);
 
     useEffect(() => {
         if (!token) return;
 
-        fetchData();
+        // fetchData();
         listUserDejaParler();
-    }, [token]); 
+    }, [token]);
 
     useEffect(() => {
         if (!mailToken) return;
-        
+
         getIdUserConnecteByEmail(mailToken)
     }, [mailToken]);
 
@@ -54,8 +81,8 @@ const MessageEntreUser = () => {
         setNomInterlocuteur(userReceive.nomutilisateur);
 
         fetchData(userReceive.idutilisateur);
-        console.log("messages:", messages);
-        console.log("idReceive:", idReceive);
+        // console.log("messages:", messages);
+        // console.log("idReceive:", idReceive);
 
     };
 
@@ -67,7 +94,7 @@ const MessageEntreUser = () => {
                 }
             });
 
-            console.log(response);
+            // console.log(response);
             setUtilisateurDejaParler(response.data);
         } catch (error) {
             console.log(error);
@@ -79,7 +106,7 @@ const MessageEntreUser = () => {
             const response = await api.post('/message', {
                 description: message,
                 idreceive: idReceive
-                },{
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -95,7 +122,7 @@ const MessageEntreUser = () => {
         }
     };
 
-    
+
 
     const fetchData = async (id) => {
         try {
@@ -105,9 +132,9 @@ const MessageEntreUser = () => {
                 }
             });
 
-            console.log(response.data);
+            // console.log(response.data);
             setMessages(response.data);
-            console.log(token);
+            // console.log(token);
             setMailToken(jwtDecode(token).sub);
         } catch (error) {
             console.error('Erreur lors de la récupération des données:', error);
@@ -115,20 +142,20 @@ const MessageEntreUser = () => {
     };
 
     useEffect(() => {
-        console.log(mailToken);
+        // console.log(mailToken);
     }, [mailToken]);
 
     useEffect(() => {
-        console.log(idUserConnected);
+        // console.log(idUserConnected);
     }, [idUserConnected]);
 
     useEffect(() => {
-        console.log(utilisateurDejaParler);
+        // console.log(utilisateurDejaParler);
     }, [utilisateurDejaParler]);
 
     const getIdUserConnecteByEmail = async (email) => {
         try {
-            const response = await api.get(`/login/email/${email}`);
+            const response = await api.get(`/login/email / ${email}`);
             const data = response.data;
             setIdUserConnected(data.idutilisateur);
         } catch (error) {
@@ -138,13 +165,13 @@ const MessageEntreUser = () => {
 
 
     useEffect(() => {
-    
-        console.log("script ooo");
+
+        // console.log("script ooo");
         const handleFilterBtnClick = () => {
             const dashboardPanel = document.querySelector('.dashboard-panel');
             dashboardPanel.classList.toggle('is-active');
         };
-        
+
         const closeMenu = document.querySelector('.close-menu');
         closeMenu.addEventListener('click', () => {
             const dashboardPanel = document.querySelector('.dashboard-panel');
@@ -166,28 +193,28 @@ const MessageEntreUser = () => {
     }, []);
 
 
-    
+
 
     return (
         <>
 
             <div className="dashboard is-full-height">
-            <div className="dashboard-panel is-scrollable has-background-white">
-                <header className="dashboard-panel-header">
+                <div className="dashboard-panel is-scrollable has-background-white">
+                    <header className="dashboard-panel-header">
 
-                </header>
-                <div className="dashboard-panel-content">
-                    <div className="buttons is-right">
-                        <a className="delete close-menu"></a>
+                    </header>
+                    <div className="dashboard-panel-content">
+                        <div className="buttons is-right">
+                            <a className="delete close-menu"></a>
+                        </div>
+                        <div className="list has-hoverable-list-items has-overflow-ellipsis" style={{ '--length': 25 }}>
+                            {utilisateurDejaParler.map((user, index) => (
+                                <ListConversation key={index} onClickConversation={handleConversationClick} userDetails={user} />
+                            ))}
+                        </div>
                     </div>
-                    <div className="list has-hoverable-list-items has-overflow-ellipsis" style={{'--length': 25}}>
-                        {utilisateurDejaParler.map((user, index) => (
-                            <ListConversation key={index} onClickConversation={handleConversationClick} userDetails={user} />
-                        ))}
-                    </div>    
                 </div>
-            </div>
-            
+
 
 
                 <div className="dashboard-main is-scrollable hero">
@@ -202,7 +229,8 @@ const MessageEntreUser = () => {
                                 <div className="list-item">
                                     <div className="list-item-image">
                                         <figure className="image is-24x24">
-                                            <img className="is-rounded" src="https://bulma.io/images/placeholders/128x128.png" alt="" />
+                                            <img className="is-rounded" src="https://bulma.io/images/placeholders/128x128.png
+" alt="" />
                                         </figure>
                                     </div>
                                     <div className="list-item-content">
@@ -214,8 +242,8 @@ const MessageEntreUser = () => {
                     </nav>
                     <main className="hero-body px-0">
                         <div className="content pt-6">
-                            {messages.map(message => (
-                                <Message m={message} idUser={idUserConnected} />
+                            {messages.map((message, index) => (
+                                <Message key={index} m={message} idUser={idUserConnected} />
                             ))}
                         </div>
                     </main>

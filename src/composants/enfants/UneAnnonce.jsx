@@ -23,12 +23,19 @@ export default function UneAnnonce({ data,ip }) {
             </div>
         ));
     }
-    function parlerAuVendeur(){
+    
+    const navigate = useNavigate();
+    const parlerAuVendeur = () => {
         const idutilisateur = data.idutilisateur;
+        console.log(idutilisateur);
         // ao amin le composant ato koa miantso an le verfication utilisateur
+        if (token == null) {
+            document.querySelector("#sign-ins").click();
+        } else {
+            navigate(`/message/${ idutilisateur }`);
+        }
 
     }
-    const navigate = useNavigate();
     const envoyer = useSubmitDataToken();
     const lien = `${ip}/favori`;
     async function addOnFavList(){
